@@ -10,16 +10,21 @@ problem1 :: proc() -> (int, bool) {
 		return -1, false
 	}
 
-	return solve_part_1(data)
+	return solve_part_2(data)
 }
 
 @(private = "file")
-solve_part_1 :: proc(data: string) -> (result: int, success: bool) {
+solve_part_2 :: proc(data: string) -> (result: int, success: bool) {
 	success = true
-	result = 0
+	current := 0
 
-	for line in strings.split(data, "\n") {
-		trimmed := strings.trim_space(line)
+	freqs := make(map[int]int)
+	lines := strings.split(data, "\n")
+	idx := -1
+
+	for {
+		idx = (idx + 1) % len(lines)
+		trimmed := strings.trim_space(lines[idx])
 		if len(trimmed) == 0 {
 			continue
 		}
@@ -29,7 +34,14 @@ solve_part_1 :: proc(data: string) -> (result: int, success: bool) {
 			success = false
 			return
 		}
-		result += val
+		current += val
+
+		if current in freqs {
+			result = current
+			return
+		}
+
+		freqs[current] = 0
 	}
 
 	return
