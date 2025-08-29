@@ -18,9 +18,13 @@ func SolveProblem1() int {
 }
 
 func computeFrequency(data string) int {
-	totalFreq := 0
-	for _, line := range strings.Split(data, "\n") {
-		line = strings.TrimSpace(line)
+	lines := strings.Split(data, "\n")
+	i, currentFreq := 0, 0
+	freqs := make(map[int]int)
+
+	for {
+		line := strings.TrimSpace(lines[i])
+		i = (i + 1) % len(lines)
 		if len(line) == 0 {
 			continue
 		}
@@ -30,8 +34,12 @@ func computeFrequency(data string) int {
 			fmt.Printf("Unable to convert %s to integer\n", line)
 			return 0
 		}
-		totalFreq += freq
-	}
 
-	return totalFreq
+		currentFreq += freq
+		if freqs[currentFreq] != 0 {
+			return currentFreq
+		} else {
+			freqs[currentFreq] = 1
+		}
+	}
 }
